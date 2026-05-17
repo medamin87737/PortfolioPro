@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { ChatHttpError, handleChat } from "../lib/chatHandler";
+import { ChatHttpError, handleChat } from "../lib/chatHandler.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method === "OPTIONS") {

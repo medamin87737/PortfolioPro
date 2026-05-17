@@ -8,6 +8,7 @@
     "dev:server": "tsx server/index.ts",
     "dev:all": "concurrently -n web,api -c cyan,magenta \"npm run dev\" \"npm run dev:server\"",
     "build": "tsx scripts/generate-prompt.ts && tsc -b && vite build",
+    "build:vercel": "tsx scripts/generate-prompt.ts && tsc -b && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -20,7 +21,9 @@
     "three": "^0.175.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "@vercel/node": "^5.3.0",
+    "tsx": "^4.19.4"
   },
   "devDependencies": {
     "@types/cors": "^2.8.18",
@@ -29,9 +32,7 @@
     "@types/react-dom": "^19.1.2",
     "@types/three": "^0.175.0",
     "@vitejs/plugin-react": "^4.4.1",
-    "@vercel/node": "^5.3.0",
     "concurrently": "^9.1.2",
-    "tsx": "^4.19.4",
     "typescript": "~5.8.3",
     "vite": "^6.3.5"
   }
