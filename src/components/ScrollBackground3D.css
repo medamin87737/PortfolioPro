@@ -1,0 +1,127 @@
+.scroll-bg-3d {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.scroll-bg-3d__canvas-wrap,
+.scroll-bg-3d__canvas-wrap canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.scroll-bg-3d__canvas-wrap {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.55s ease;
+}
+
+.scroll-bg-3d__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: var(--section-video-opacity, 0);
+  transition: opacity 0.55s ease;
+  z-index: 0;
+}
+
+.scroll-bg-3d--video .scroll-bg-3d__overlay {
+  background: radial-gradient(
+    ellipse 110% 100% at 50% 50%,
+    color-mix(in srgb, var(--bg) 18%, transparent) 0%,
+    color-mix(in srgb, var(--bg) 38%, transparent) 100%
+  );
+}
+
+.scroll-bg-3d--video .scroll-bg-3d__vignette {
+  opacity: 0.35;
+}
+
+/* Overlay minimal — 3D plein écran visible partout */
+.scroll-bg-3d__overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 120% 100% at 50% 50%,
+    color-mix(in srgb, var(--bg) 25%, transparent) 0%,
+    color-mix(in srgb, var(--bg) 45%, transparent) 55%,
+    color-mix(in srgb, var(--bg) 55%, transparent) 100%
+  );
+}
+
+.scroll-bg-3d__vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, color-mix(in srgb, var(--bg) 50%, transparent) 100%);
+  opacity: 0.45;
+}
+
+/* Accueil — fond décalé à droite, moins sombre */
+.scroll-bg-3d--home .scroll-bg-3d__overlay {
+  background: radial-gradient(
+    ellipse 120% 100% at 68% 44%,
+    color-mix(in srgb, var(--bg) 1%, transparent) 0%,
+    color-mix(in srgb, var(--bg) 6%, transparent) 50%,
+    color-mix(in srgb, var(--bg) 11%, transparent) 100%
+  );
+}
+
+.scroll-bg-3d--home .scroll-bg-3d__vignette {
+  opacity: 0.04;
+  background: radial-gradient(
+    ellipse 90% 80% at 72% 45%,
+    transparent 70%,
+    color-mix(in srgb, var(--bg) 12%, transparent) 100%
+  );
+}
+
+.scroll-bg-3d__lift {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 85% 80% at 32% 42%,
+    color-mix(in srgb, #ffffff 18%, transparent) 0%,
+    color-mix(in srgb, #ffffff 8%, transparent) 45%,
+    transparent 72%
+  );
+}
+
+[data-theme="dark"] .scroll-bg-3d--home .scroll-bg-3d__overlay {
+  background: radial-gradient(
+    ellipse 120% 100% at 68% 44%,
+    color-mix(in srgb, #243830 4%, transparent) 0%,
+    color-mix(in srgb, var(--bg) 9%, transparent) 50%,
+    color-mix(in srgb, var(--bg) 14%, transparent) 100%
+  );
+}
+
+[data-theme="dark"] .scroll-bg-3d__lift {
+  background: radial-gradient(
+    ellipse 85% 80% at 30% 40%,
+    color-mix(in srgb, #ffffff 13%, transparent) 0%,
+    color-mix(in srgb, var(--accent) 3%, transparent) 40%,
+    transparent 70%
+  );
+}
+
+@media (max-width: 1023px) {
+  .scroll-bg-3d__overlay {
+    background: radial-gradient(
+      ellipse 130% 90% at 50% 40%,
+      color-mix(in srgb, var(--bg) 30%, transparent) 0%,
+      color-mix(in srgb, var(--bg) 50%, transparent) 100%
+    );
+  }
+
+  .scroll-bg-3d--home .scroll-bg-3d__overlay {
+    background: radial-gradient(
+      ellipse 120% 95% at 65% 40%,
+      color-mix(in srgb, var(--bg) 3%, transparent) 0%,
+      color-mix(in srgb, var(--bg) 10%, transparent) 100%
+    );
+  }
+}

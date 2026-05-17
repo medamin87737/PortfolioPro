@@ -1,0 +1,117 @@
+.section {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: calc(5rem + var(--safe-top)) var(--page-pad-x) var(--space-8, 64px);
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+.section__divider {
+  position: absolute;
+  top: 0;
+  left: var(--page-pad-x);
+  right: var(--page-pad-x);
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--border) 20%,
+    var(--border) 80%,
+    transparent
+  );
+}
+
+.section__frame {
+  width: 100%;
+  max-width: var(--layout-max, 1280px);
+  margin-inline: auto;
+}
+
+.section__content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+.section__model-tag {
+  position: absolute;
+  top: calc(4.5rem + var(--safe-top));
+  right: var(--page-pad-x);
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2, 8px);
+  font-size: var(--type-label, 0.65rem);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  opacity: 0.45;
+  transition: opacity 0.4s ease, color 0.4s ease;
+}
+
+.section__model-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+}
+
+.section--active .section__model-tag {
+  opacity: 1;
+  color: var(--accent);
+}
+
+.section--active .section__model-dot {
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.section--active .section__content {
+  animation: sectionIn 0.55s ease forwards;
+}
+
+@keyframes sectionIn {
+  from {
+    opacity: 0.7;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (min-width: 1024px) {
+  .section {
+    padding: var(--section-pad-top, calc(96px + var(--safe-top)))
+      var(--grid-margin, 80px) var(--section-pad-bottom, 80px);
+  }
+
+  .section__divider {
+    left: var(--grid-margin, 80px);
+    right: var(--grid-margin, 80px);
+  }
+
+  .section__model-tag {
+    top: calc(var(--space-7, 48px) + var(--safe-top));
+    left: var(--grid-margin, 80px);
+    right: auto;
+  }
+}
+
+@media (max-width: 639px) {
+  .section {
+    padding-top: calc(4.5rem + var(--safe-top));
+    padding-bottom: var(--space-7, 48px);
+  }
+
+  .section__model-tag {
+    left: var(--page-pad-x);
+    right: auto;
+  }
+}

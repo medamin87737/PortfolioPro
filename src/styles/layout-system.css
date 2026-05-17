@@ -1,0 +1,234 @@
+/* ─── Grille & conteneur ─── */
+:root {
+  --layout-max: 1280px;
+  --content-max: 65ch;
+}
+
+.layout-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6, 32px);
+}
+
+.grid {
+  display: grid;
+  gap: var(--space-5, 24px);
+  width: 100%;
+}
+
+.grid--2 {
+  grid-template-columns: 1fr;
+}
+
+.grid--3 {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .grid--2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid--3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .grid--sidebar {
+    grid-template-columns: minmax(220px, 28%) 1fr;
+    gap: var(--space-7, 48px);
+    align-items: start;
+  }
+}
+
+/* ─── Blocs de contenu (légers, pas des cartes lourdes) ─── */
+.content-block {
+  padding: var(--space-5, 24px) 0;
+  border-top: 1px solid var(--border);
+}
+
+.content-block:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.content-block__title {
+  font-size: var(--type-h3, 1.1rem);
+  font-weight: 600;
+  margin-bottom: var(--space-4, 16px);
+  color: var(--text);
+}
+
+.content-block__title.mono {
+  font-family: "JetBrains Mono", monospace;
+  font-size: var(--type-label, 0.75rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* Item en liste */
+.list-item {
+  padding: var(--space-4, 16px) 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+.list-item__title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: var(--space-1, 4px);
+}
+
+.list-item__meta {
+  font-size: var(--type-label, 0.75rem);
+  color: var(--accent);
+  margin-bottom: var(--space-2, 8px);
+}
+
+.list-item__text {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* Stats */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--space-5, 24px);
+  padding: var(--space-6, 32px) 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.stat-item__value {
+  display: block;
+  font-family: "JetBrains Mono", monospace;
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: var(--space-2, 8px);
+}
+
+.stat-item__label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* Actions */
+.actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4, 16px);
+  padding-top: var(--space-4, 16px);
+}
+
+/* Tags */
+.tag {
+  display: inline-block;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.65rem;
+  padding: var(--space-1, 4px) var(--space-3, 12px);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-muted);
+}
+
+.tag--accent {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Prose */
+.prose {
+  font-size: var(--type-body, 1.05rem);
+  line-height: var(--leading-relaxed, 1.7);
+  color: var(--text-muted);
+  max-width: var(--content-max);
+}
+
+.prose + .prose {
+  margin-top: var(--space-4, 16px);
+}
+
+/* Contact grid */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+@media (min-width: 640px) {
+  .contact-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-5, 24px);
+  }
+}
+
+.contact-item {
+  display: block;
+  padding: var(--space-5, 24px) 0;
+  border-bottom: 1px solid var(--border);
+  transition: color 0.25s ease;
+}
+
+a.contact-item:hover .contact-item__value {
+  color: var(--accent);
+}
+
+@media (min-width: 640px) {
+  .contact-item {
+    border-bottom: none;
+    padding: 0;
+  }
+}
+
+.contact-item__label {
+  display: block;
+  font-size: var(--type-label, 0.65rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: var(--space-2, 8px);
+}
+
+.contact-item__value {
+  font-size: 0.95rem;
+  word-break: break-word;
+}
+
+.lang-grid {
+  gap: var(--space-4, 16px);
+}
+
+.skills-group-icon {
+  margin-right: var(--space-2, 8px);
+  color: var(--accent);
+}
+
+.skills-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2, 8px);
+}
+
+.site-footer {
+  margin-top: var(--space-6, 32px);
+  padding-top: var(--space-5, 24px);
+  border-top: 1px solid var(--border);
+}
+
+.site-footer__text {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}

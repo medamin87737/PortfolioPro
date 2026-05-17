@@ -1,0 +1,55 @@
+.model-indicator {
+  position: fixed;
+  z-index: 900;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.model-indicator__title {
+  display: none;
+}
+
+.model-indicator__label {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.model-indicator__dots {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.model-indicator__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.model-indicator__dot--active {
+  background: var(--accent);
+  transform: scale(1.3);
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
+@media (max-width: 639px) {
+  .model-indicator {
+    bottom: calc(0.75rem + var(--safe-bottom));
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+@media (min-width: 640px) {
+  .model-indicator {
+    bottom: calc(1.25rem + var(--safe-bottom));
+    right: var(--page-pad-x);
+  }
+}

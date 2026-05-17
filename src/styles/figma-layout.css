@@ -1,0 +1,65 @@
+/* Grille & espacements type Figma (8px base) */
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 80px;
+
+  --type-display: clamp(2.5rem, 5vw, 4.5rem);
+  --type-h1: clamp(2rem, 4vw, 3.5rem);
+  --type-h2: clamp(1.5rem, 3vw, 2.5rem);
+  --type-h3: clamp(1.125rem, 2vw, 1.5rem);
+  --type-body: clamp(1rem, 1.5vw, 1.125rem);
+  --type-caption: 0.75rem;
+  --type-label: 0.6875rem;
+
+  --leading-tight: 1.1;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.65;
+
+  --grid-columns: 12;
+  --grid-gutter: 24px;
+}
+
+/* Laptop & desktop — plein écran, marges Figma 80px */
+@media (min-width: 1024px) {
+  :root {
+    --page-pad-x: 80px;
+    --grid-margin: 80px;
+    --section-pad-top: calc(96px + var(--safe-top));
+    --section-pad-bottom: 80px;
+  }
+
+  .site-main {
+    max-width: 100vw;
+  }
+
+  .section:not(.hero) {
+    padding: var(--section-pad-top) var(--grid-margin) var(--section-pad-bottom);
+  }
+}
+
+/* Laptop 1024–1439 */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  :root {
+    --page-pad-x: 64px;
+    --grid-margin: 64px;
+  }
+}
+
+/* Grand écran 1440+ */
+@media (min-width: 1440px) {
+  .section__content {
+    padding-inline: 0;
+  }
+
+  .hero__inner {
+    max-width: 1280px;
+    margin-inline: auto;
+  }
+}

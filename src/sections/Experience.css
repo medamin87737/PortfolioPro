@@ -1,0 +1,374 @@
+.journey {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8, 64px);
+  width: 100%;
+}
+
+/* ─── Zones séparées ─── */
+.journey-zone {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6, 32px);
+}
+
+.journey-zone--experience {
+  padding-bottom: var(--space-2, 8px);
+}
+
+.journey-zone--education {
+  padding-top: var(--space-2, 8px);
+}
+
+.journey-zone__header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4, 16px);
+  padding-bottom: var(--space-4, 16px);
+  border-bottom: 1px solid var(--border);
+}
+
+.journey-zone--experience .journey-zone__header {
+  border-bottom-color: color-mix(in srgb, var(--accent) 35%, var(--border));
+}
+
+.journey-zone--education .journey-zone__header {
+  border-bottom-color: color-mix(in srgb, var(--accent-2) 35%, var(--border));
+}
+
+.journey-zone__icon {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  color: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--border));
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--accent) 8%, var(--bg));
+}
+
+.journey-zone__icon--edu {
+  color: var(--accent-2);
+  border-color: color-mix(in srgb, var(--accent-2) 40%, var(--border));
+  background: color-mix(in srgb, var(--accent-2) 8%, var(--bg));
+}
+
+.journey-zone__title {
+  font-size: clamp(1.25rem, 3vw, 1.6rem);
+  font-weight: 700;
+  margin-bottom: var(--space-2, 8px);
+  color: var(--text);
+}
+
+.journey-zone__subtitle {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  max-width: 48ch;
+}
+
+/* Séparateur entre expérience et formation */
+.journey-separator {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5, 24px);
+  padding: var(--space-2, 8px) 0;
+}
+
+.journey-separator__line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--border) 20%,
+    color-mix(in srgb, var(--accent-2) 50%, var(--border)) 50%,
+    var(--border) 80%,
+    transparent
+  );
+}
+
+.journey-separator__label {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+  padding: var(--space-2, 8px) var(--space-4, 16px);
+  border: 1px solid color-mix(in srgb, var(--accent-2) 30%, var(--border));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent-2) 6%, var(--bg));
+}
+
+/* ─── Grilles de cartes ─── */
+.journey-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5, 20px);
+}
+
+.journey-cards--edu {
+  grid-template-columns: 1fr;
+}
+
+/* ─── Carte parcours ─── */
+.journey-card {
+  --card-accent: var(--accent);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2, 8px);
+  padding: var(--space-5, 24px);
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--card-accent) 28%, var(--border));
+  background: color-mix(in srgb, var(--bg-elevated) 72%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  overflow: hidden;
+  min-height: 100%;
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.journey-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--card-accent), transparent 78%);
+}
+
+.journey-card__shine {
+  position: absolute;
+  inset: -35% -15% auto auto;
+  width: 50%;
+  height: 110%;
+  background: radial-gradient(
+    circle at center,
+    color-mix(in srgb, var(--card-accent) 15%, transparent) 0%,
+    transparent 68%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.journey-card:hover,
+.journey-card:focus-within {
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--card-accent) 52%, var(--border));
+  box-shadow:
+    0 6px 28px color-mix(in srgb, var(--card-accent) 12%, transparent),
+    0 20px 48px color-mix(in srgb, #000 16%, transparent);
+}
+
+.journey-card:hover .journey-card__shine,
+.journey-card:focus-within .journey-card__shine {
+  opacity: 1;
+}
+
+.journey-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3, 12px);
+  position: relative;
+  z-index: 1;
+  margin-bottom: var(--space-2, 8px);
+}
+
+.journey-card__index {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--card-accent);
+}
+
+.journey-card__badge {
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  color: var(--card-accent);
+  border: 1px solid color-mix(in srgb, var(--card-accent) 35%, var(--border));
+  background: color-mix(in srgb, var(--card-accent) 8%, transparent);
+}
+
+.journey-card__role {
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text);
+  position: relative;
+  z-index: 1;
+}
+
+.journey-card__org {
+  font-size: 0.9rem;
+  color: var(--card-accent);
+  position: relative;
+  z-index: 1;
+}
+
+.journey-card__period {
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  position: relative;
+  z-index: 1;
+}
+
+.journey-card__desc {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  margin-top: var(--space-2, 8px);
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.journey-card--edu .journey-card__role {
+  font-size: 1rem;
+}
+
+.journey-card__footer {
+  margin-top: var(--space-4, 16px);
+  padding-top: var(--space-3, 12px);
+  border-top: 1px solid var(--border);
+  position: relative;
+  z-index: 1;
+}
+
+.journey-card__bar {
+  display: block;
+  height: 2px;
+  width: 100%;
+  max-width: 100px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--card-accent), transparent);
+  transform: scaleX(0.25);
+  transform-origin: left;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.journey-card:hover .journey-card__bar,
+.journey-card:focus-within .journey-card__bar {
+  transform: scaleX(1);
+}
+
+/* Langues — sous-bloc formation */
+.journey-langs {
+  margin-top: var(--space-6, 32px);
+  padding-top: var(--space-6, 32px);
+  border-top: 1px dashed color-mix(in srgb, var(--accent-2) 30%, var(--border));
+}
+
+.journey-langs__title {
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+  margin-bottom: var(--space-4, 16px);
+}
+
+.journey-langs__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--space-4, 16px);
+}
+
+.journey-lang-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1, 4px);
+  padding: var(--space-4, 16px);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--bg-elevated) 65%, transparent);
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.journey-lang-card:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--accent-2) 45%, var(--border));
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--accent-2) 10%, transparent);
+}
+
+.journey-lang-card__name {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.journey-lang-card__level {
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: var(--accent-2);
+}
+
+@media (min-width: 640px) {
+  .journey-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .journey-cards--edu {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .journey-cards--edu .journey-card:last-child {
+    grid-column: 1 / -1;
+    max-width: calc(50% - var(--space-5, 12px));
+  }
+}
+
+@media (min-width: 1024px) {
+  .journey-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .journey-cards--edu {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .journey-cards--edu .journey-card:last-child {
+    grid-column: auto;
+    max-width: none;
+  }
+}
+
+@media (max-width: 639px) {
+  .journey {
+    gap: var(--space-7, 48px);
+  }
+
+  .journey-card {
+    padding: var(--space-4, 16px);
+  }
+
+  .journey-zone__icon {
+    width: 44px;
+    height: 44px;
+    font-size: 1.1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journey-card,
+  .journey-lang-card,
+  .journey-card__bar {
+    transition: none;
+  }
+
+  .journey-card:hover,
+  .journey-card:focus-within,
+  .journey-lang-card:hover {
+    transform: none;
+  }
+}

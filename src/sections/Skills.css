@@ -1,0 +1,268 @@
+.skills-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5, 20px);
+  width: 100%;
+}
+
+.skill-card {
+  --card-accent: var(--accent);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4, 16px);
+  padding: var(--space-5, 24px);
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--card-accent) 28%, var(--border));
+  background: color-mix(in srgb, var(--bg-elevated) 72%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  overflow: hidden;
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.skill-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--card-accent), transparent 75%);
+  opacity: 0.85;
+  transition: opacity 0.35s ease;
+}
+
+.skill-card__shine {
+  position: absolute;
+  inset: -40% -20% auto auto;
+  width: 55%;
+  height: 120%;
+  background: radial-gradient(
+    circle at center,
+    color-mix(in srgb, var(--card-accent) 18%, transparent) 0%,
+    transparent 68%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.skill-card:hover,
+.skill-card:focus-within {
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--card-accent) 55%, var(--border));
+  box-shadow:
+    0 4px 24px color-mix(in srgb, var(--card-accent) 12%, transparent),
+    0 20px 48px color-mix(in srgb, #000 18%, transparent);
+}
+
+.skill-card:hover .skill-card__shine,
+.skill-card:focus-within .skill-card__shine {
+  opacity: 1;
+}
+
+.skill-card:hover .skill-card__icon,
+.skill-card:focus-within .skill-card__icon {
+  transform: scale(1.06) rotate(-3deg);
+  border-color: color-mix(in srgb, var(--card-accent) 50%, var(--border));
+  box-shadow: 0 0 20px color-mix(in srgb, var(--card-accent) 25%, transparent);
+}
+
+.skill-card__header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4, 16px);
+  position: relative;
+  z-index: 1;
+}
+
+.skill-card__icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  color: var(--card-accent);
+  border: 1px solid color-mix(in srgb, var(--card-accent) 35%, var(--border));
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--card-accent) 8%, var(--bg));
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.skill-card__meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.skill-card__title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: var(--space-1, 4px);
+  color: var(--text);
+}
+
+.skill-card__count {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.skill-card__list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2, 8px);
+  position: relative;
+  z-index: 1;
+}
+
+.skill-card__tag {
+  display: inline-block;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.68rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  color: var(--text-muted);
+  background: color-mix(in srgb, var(--bg) 50%, transparent);
+  border: 1px solid var(--border);
+  transition:
+    color 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+.skill-card:hover .skill-card__tag,
+.skill-card:focus-within .skill-card__tag {
+  border-color: color-mix(in srgb, var(--card-accent) 30%, var(--border));
+}
+
+.skill-card__tag:hover {
+  color: var(--card-accent);
+  border-color: var(--card-accent);
+  background: color-mix(in srgb, var(--card-accent) 10%, transparent);
+  transform: translateY(-2px);
+}
+
+.skill-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3, 12px);
+  margin-top: auto;
+  padding-top: var(--space-3, 12px);
+  border-top: 1px solid var(--border);
+  position: relative;
+  z-index: 1;
+}
+
+.skill-card__bar {
+  flex: 1;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--card-accent),
+    color-mix(in srgb, var(--card-accent) 20%, transparent)
+  );
+  transform-origin: left;
+  transform: scaleX(0.35);
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.skill-card:hover .skill-card__bar,
+.skill-card:focus-within .skill-card__bar {
+  transform: scaleX(1);
+}
+
+.skill-card__index {
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--card-accent) 70%, var(--text-muted));
+  opacity: 0.7;
+}
+
+@media (min-width: 640px) {
+  .skills-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-5, 24px);
+  }
+}
+
+@media (min-width: 1024px) {
+  .skills-cards {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-5, 24px);
+  }
+
+  .skill-card {
+    min-height: 220px;
+  }
+
+  /* Cartes plus larges pour catégories avec plus d’items */
+  .skill-card:nth-child(1),
+  .skill-card:nth-child(4),
+  .skill-card:nth-child(7) {
+    grid-column: span 2;
+  }
+}
+
+@media (min-width: 1280px) {
+  .skills-cards {
+    grid-template-columns: repeat(12, 1fr);
+  }
+
+  .skill-card:nth-child(1),
+  .skill-card:nth-child(4) {
+    grid-column: span 4;
+  }
+
+  .skill-card:nth-child(2),
+  .skill-card:nth-child(3),
+  .skill-card:nth-child(5),
+  .skill-card:nth-child(6) {
+    grid-column: span 3;
+  }
+
+  .skill-card:nth-child(7),
+  .skill-card:nth-child(8) {
+    grid-column: span 6;
+  }
+}
+
+@media (max-width: 639px) {
+  .skill-card {
+    padding: var(--space-4, 16px);
+  }
+
+  .skill-card__icon {
+    width: 42px;
+    height: 42px;
+    font-size: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skill-card,
+  .skill-card__icon,
+  .skill-card__tag,
+  .skill-card__bar {
+    transition: none;
+  }
+
+  .skill-card:hover,
+  .skill-card:focus-within {
+    transform: none;
+  }
+}
