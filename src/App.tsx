@@ -1,10 +1,8 @@
-import { lazy, Suspense, useState } from "react";
+import { useState } from "react";
 import { Navbar } from "./components/Navbar";
 import { Preloader } from "./components/Preloader";
 import { SectionNav } from "./components/SectionNav";
-const ScrollBackground3D = lazy(() =>
-  import("./components/ScrollBackground3D").then((m) => ({ default: m.ScrollBackground3D })),
-);
+import { ScrollBackground3D } from "./components/ScrollBackground3D";
 import { About } from "./sections/About";
 import { Contact } from "./sections/Contact";
 import { Experience } from "./sections/Experience";
@@ -30,9 +28,7 @@ export default function App() {
 
       {loaded && (
         <ScrollProgressProvider enabled>
-          <Suspense fallback={null}>
-            <ScrollBackground3D enabled />
-          </Suspense>
+          <ScrollBackground3D enabled />
           <Navbar theme={theme} onToggleTheme={toggle} />
           <SectionNav />
           <main className="site-main app-interface">

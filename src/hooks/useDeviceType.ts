@@ -31,6 +31,6 @@ export function useDeviceType() {
 
 export function getAdaptiveDpr(width: number): number {
   if (width < 640) return 1;
-  if (width < 1024) return 1.1;
-  return Math.min(1.35, window.devicePixelRatio);
+  if (width < 1024) return 1.15;
+  return Math.min(1.75, window.devicePixelRatio);
 }

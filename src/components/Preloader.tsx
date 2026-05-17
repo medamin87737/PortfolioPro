@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ASSETS } from "../data/portfolio";
 import "./Preloader.css";
@@ -9,6 +9,14 @@ type PreloaderProps = {
 
 export function Preloader({ onComplete }: PreloaderProps) {
   const [progress, setProgress] = useState(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video) {
+      video.play().catch(() => {});
+    }
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -17,9 +25,9 @@ export function Preloader({ onComplete }: PreloaderProps) {
           clearInterval(interval);
           return 100;
         }
-        return Math.min(100, p + Math.random() * 14 + 6);
+        return Math.min(100, p + Math.random() * 12 + 4);
       });
-    }, 70);
+    }, 100);
 
     return () => clearInterval(interval);
   }, []);
@@ -29,20 +37,23 @@ export function Preloader({ onComplete }: PreloaderProps) {
 
     const tl = gsap.timeline({ onComplete });
 
-    tl.to(".preloader__content", { opacity: 0, y: 24, duration: 0.45, ease: "power2.in" })
-      .to(".preloader__overlay", { opacity: 0.9, duration: 0.35 }, "-=0.25")
-      .to(".preloader", { opacity: 0, duration: 0.55, ease: "power2.inOut" })
+    tl.to(".preloader__content", { opacity: 0, y: 24, duration: 0.5, ease: "power2.in" })
+      .to(".preloader__overlay", { opacity: 0.9, duration: 0.4 }, "-=0.3")
+      .to(".preloader", { opacity: 0, duration: 0.7, ease: "power2.inOut" })
       .set(".preloader", { display: "none" });
   }, [progress, onComplete]);
 
   return (
     <div className="preloader" aria-busy="true" aria-label="Chargement">
-      <img
-        className="preloader__poster"
-        src={ASSETS.poster}
-        alt=""
-        fetchPriority="high"
-        decoding="async"
+      <video
+        ref={videoRef}
+        className="preloader__video"
+        src={ASSETS.video}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
       />
       <div className="preloader__overlay" />
       <div className="preloader__vignette" />

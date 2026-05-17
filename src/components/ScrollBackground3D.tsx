@@ -3,19 +3,21 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Center, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 import { ASSETS, SCROLL_SECTIONS } from "../data/portfolio";
-import { useDeviceType, getAdaptiveDpr } from "../hooks/useDeviceType";
-import { usePreloadModels } from "../hooks/usePreloadModels";
+import { getAdaptiveDpr } from "../hooks/useDeviceType";
 import { sectionStateRef } from "../hooks/useScrollProgress";
-import {
-  MODEL_KEYS,
-  useVisibleModels,
-  type ModelKey,
-} from "../hooks/useVisibleModels";
 import "./ScrollBackground3D.css";
 
+type ModelKey = keyof typeof ASSETS.models;
+
+const MODEL_KEYS = [...new Set(SCROLL_SECTIONS.map((s) => s.modelKey))] as ModelKey[];
+/** Modèles masqués : accueil (programmer), compétences (icon → vidéo) */
+const VISIBLE_MODEL_KEYS = MODEL_KEYS.filter((k) => k !== "programmer" && k !== "icon");
+
+const VIDEO_SECTION_IDS = new Set(["skills", "experience", "contact"]);
+
+VISIBLE_MODEL_KEYS.forEach((key) => useGLTF.preload(ASSETS.models[key]));
+
 const HACKER_SECTION_IDS = new Set(["projects"]);
-const EXPERIENCE_SECTION_INDEX = SCROLL_SECTIONS.findIndex((s) => s.id === "experience");
-const CONTACT_SECTION_INDEX = SCROLL_SECTIONS.findIndex((s) => s.id === "contact");
 
 function setGroupOpacity(group: THREE.Group, opacity: number) {
   group.traverse((child) => {
@@ -30,7 +32,18 @@ function setGroupOpacity(group: THREE.Group, opacity: number) {
   });
 }
 
+function videoBlendFromWeights(weights: number[]): number {
+  const sum = SCROLL_SECTIONS.reduce((acc, section, i) => {
+    if (VIDEO_SECTION_IDS.has(section.id)) return acc + weights[i];
+    return acc;
+  }, 0);
+  return Math.min(1, sum * 1.1);
+}
+
 function opacityForModelKey(weights: number[], modelKey: ModelKey): number {
+  if (modelKey === "laptop" || modelKey === "programmer" || modelKey === "icon") {
+    return 0;
+  }
   if (modelKey === "hackerRoom") {
     return SCROLL_SECTIONS.reduce((sum, section, i) => {
       if (HACKER_SECTION_IDS.has(section.id)) return sum + weights[i];
@@ -44,54 +57,26 @@ function opacityForModelKey(weights: number[], modelKey: ModelKey): number {
   return max;
 }
 
-type ScrollModelProps = {
-  modelKey: ModelKey;
-  config: (typeof SCROLL_SECTIONS)[number];
-};
-
-/** Un seul GLB monté à la fois dans le tree → chargement à la demande */
-function ScrollModel({ modelKey, config }: ScrollModelProps) {
-  const url = ASSETS.models[modelKey];
-  const { scene } = useGLTF(url);
-  const groupRef = useRef<THREE.Group>(null);
-  const opacity = useRef(modelKey === "programmer" ? 1 : 0);
-  const cloned = useMemo(() => scene.clone(), [scene]);
-
-  useEffect(() => {
-    return () => {
-      useGLTF.clear(url);
-    };
-  }, [url]);
-
-  useFrame((_, delta) => {
-    const group = groupRef.current;
-    if (!group) return;
-
-    const weights = sectionStateRef.weights;
-    const target = Math.min(1, opacityForModelKey(weights, modelKey));
-    opacity.current = THREE.MathUtils.lerp(opacity.current, target, 0.14);
-    const o = opacity.current;
-
-    group.visible = o > 0.02;
-    setGroupOpacity(group, o);
-    group.rotation.y += delta * 0.25;
-
-    const s = config.scale * (0.92 + o * 0.08);
-    group.scale.setScalar(s);
-  });
-
-  return (
-    <group ref={groupRef} position={config.position}>
-      <Center>
-        <primitive object={cloned} />
-      </Center>
-    </group>
-  );
-}
-
-function SceneModels({ visible }: { visible: Set<ModelKey> }) {
+function SceneModels() {
   const { camera } = useThree();
   const lookAt = useMemo(() => new THREE.Vector3(), []);
+  const opacities = useRef<Record<ModelKey, number>>(
+    Object.fromEntries(MODEL_KEYS.map((k) => [k, 0])) as Record<ModelKey, number>,
+  );
+
+  const gltfMap = {
+    hackerRoom: useGLTF(ASSETS.models.hackerRoom),
+    hack: useGLTF(ASSETS.models.hack),
+    laptop: useGLTF(ASSETS.models.laptop),
+  };
+
+  const scenesByKey = useMemo(
+    () =>
+      Object.fromEntries(
+        VISIBLE_MODEL_KEYS.map((key) => [key, gltfMap[key].scene.clone()]),
+      ) as Record<Exclude<ModelKey, "programmer" | "icon">, THREE.Group>,
+    [gltfMap.hackerRoom.scene, gltfMap.hack.scene, gltfMap.laptop.scene],
+  );
 
   const modelConfig = useMemo(() => {
     const byKey: Partial<Record<ModelKey, (typeof SCROLL_SECTIONS)[number]>> = {};
@@ -100,6 +85,8 @@ function SceneModels({ visible }: { visible: Set<ModelKey> }) {
     }
     return byKey as Record<ModelKey, (typeof SCROLL_SECTIONS)[number]>;
   }, []);
+
+  const groups = useRef<Partial<Record<ModelKey, THREE.Group | null>>>({});
 
   useFrame(() => {
     const weights = sectionStateRef.weights;
@@ -158,6 +145,27 @@ function SceneModels({ visible }: { visible: Set<ModelKey> }) {
       camera.updateProjectionMatrix();
     }
     camera.lookAt(lookAt);
+
+    VISIBLE_MODEL_KEYS.forEach((modelKey) => {
+      const group = groups.current[modelKey];
+      if (!group) return;
+
+      const target = Math.min(1, opacityForModelKey(weights, modelKey));
+      opacities.current[modelKey] = THREE.MathUtils.lerp(
+        opacities.current[modelKey],
+        target,
+        0.14,
+      );
+      const o = opacities.current[modelKey];
+      const section = modelConfig[modelKey];
+
+      group.visible = o > 0.02;
+      setGroupOpacity(group, o);
+      group.rotation.y = time * 0.25;
+
+      const s = section.scale * (0.92 + o * 0.08);
+      group.scale.setScalar(s);
+    });
   });
 
   return (
@@ -168,62 +176,54 @@ function SceneModels({ visible }: { visible: Set<ModelKey> }) {
       <pointLight position={[0, 6, 4]} intensity={1} color="#00d4ff" distance={30} />
       <hemisphereLight args={["#a8ffd8", "#1a2822", 0.65]} />
 
-      {MODEL_KEYS.filter((key) => visible.has(key)).map((modelKey) => (
-        <ScrollModel key={modelKey} modelKey={modelKey} config={modelConfig[modelKey]} />
-      ))}
+      {VISIBLE_MODEL_KEYS.map((modelKey) => {
+        const section = modelConfig[modelKey];
+        return (
+          <group
+            key={modelKey}
+            ref={(el) => {
+              groups.current[modelKey] = el;
+            }}
+            position={section.position}
+          >
+            <Center>
+              <primitive object={scenesByKey[modelKey]} />
+            </Center>
+          </group>
+        );
+      })}
     </>
   );
 }
 
-function ScrollCanvas({ visible }: { visible: Set<ModelKey> }) {
+function ScrollCanvas() {
   const width = typeof window !== "undefined" ? window.innerWidth : 1280;
   const maxDpr = getAdaptiveDpr(width);
 
   return (
     <Canvas
       camera={{ position: [8, 6, 10], fov: 42, near: 0.1, far: 300 }}
-      gl={{
-        antialias: width >= 768,
-        alpha: true,
-        powerPreference: "high-performance",
-        stencil: false,
-      }}
+      gl={{ antialias: width >= 640, alpha: true, powerPreference: "high-performance" }}
       dpr={[1, maxDpr]}
-      frameloop="always"
     >
       <Suspense fallback={null}>
-        <SceneModels visible={visible} />
+        <SceneModels />
       </Suspense>
     </Canvas>
   );
 }
 
 export function ScrollBackground3D({ enabled }: { enabled: boolean }) {
-  const device = useDeviceType();
-  const enable3d = enabled && device !== "mobile";
-  const visible = useVisibleModels(enable3d);
   const [isHome, setIsHome] = useState(true);
   const [videoBlend, setVideoBlend] = useState(0);
-  const [videoReady, setVideoReady] = useState(false);
-  const [mountCanvas, setMountCanvas] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
-
-  usePreloadModels();
-
-  useEffect(() => {
-    if (!enable3d) return;
-    const id = requestAnimationFrame(() => setMountCanvas(true));
-    return () => cancelAnimationFrame(id);
-  }, [enable3d]);
 
   useEffect(() => {
     if (!enabled) return;
     const tick = () => {
       const home = sectionStateRef.activeIndex === 0;
       const w = sectionStateRef.weights;
-      const experienceW = w[EXPERIENCE_SECTION_INDEX] ?? 0;
-      const contactW = w[CONTACT_SECTION_INDEX] ?? 0;
-      const blend = Math.min(1, (experienceW + contactW) * 1.1);
+      const blend = videoBlendFromWeights(w);
       setIsHome(home);
       setVideoBlend(blend);
       document.body.classList.toggle("is-home", home);
@@ -240,42 +240,30 @@ export function ScrollBackground3D({ enabled }: { enabled: boolean }) {
 
   useEffect(() => {
     const v = videoRef.current;
-    if (!v) return;
-
-    if (videoBlend > 0.12) {
-      if (!videoReady) {
-        v.src = ASSETS.video;
-        v.load();
-        setVideoReady(true);
-      }
-      v.play().catch(() => undefined);
-    } else if (videoReady) {
-      v.pause();
-    }
-  }, [videoBlend, videoReady]);
+    if (!v || videoBlend <= 0.05) return;
+    v.play().catch(() => undefined);
+  }, [videoBlend]);
 
   if (!enabled) return null;
 
   return (
     <div
-      className={`scroll-bg-3d ${isHome ? "scroll-bg-3d--home" : ""} ${videoBlend > 0.08 ? "scroll-bg-3d--video" : ""} ${!enable3d ? "scroll-bg-3d--lite" : ""}`.trim()}
+      className={`scroll-bg-3d ${isHome ? "scroll-bg-3d--home" : ""} ${videoBlend > 0.08 ? "scroll-bg-3d--video" : ""}`.trim()}
       aria-hidden
       style={{ "--section-video-opacity": videoBlend } as CSSProperties}
     >
       <video
         ref={videoRef}
         className="scroll-bg-3d__video"
+        src={ASSETS.video}
         muted
         loop
         playsInline
-        preload="none"
-        poster={ASSETS.poster}
+        preload="auto"
       />
-      {mountCanvas && enable3d && (
-        <div className="scroll-bg-3d__canvas-wrap" style={{ opacity: 1 - videoBlend * 0.95 }}>
-          <ScrollCanvas visible={visible} />
-        </div>
-      )}
+      <div className="scroll-bg-3d__canvas-wrap" style={{ opacity: 1 - videoBlend * 0.95 }}>
+        <ScrollCanvas />
+      </div>
       {isHome && videoBlend < 0.15 && <div className="scroll-bg-3d__lift" />}
       <div className="scroll-bg-3d__overlay" />
       <div className="scroll-bg-3d__vignette" />
