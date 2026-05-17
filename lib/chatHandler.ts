@@ -1,4 +1,11 @@
-import { ASSISTANT_SYSTEM_PROMPT } from "../src/data/assistantContext.ts";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const promptPath = path.join(path.dirname(fileURLToPath(import.meta.url)), "systemPrompt.json");
+const ASSISTANT_SYSTEM_PROMPT = (
+  JSON.parse(readFileSync(promptPath, "utf8")) as { prompt: string }
+).prompt;
 
 const KEY_PLACEHOLDER = /votre-cle|your[_-]?key|xxx|changeme/i;
 

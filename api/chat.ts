@@ -2,12 +2,20 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { ChatHttpError, handleChat } from "../lib/chatHandler";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (req.method === "OPTIONS") {
+    return res.status(204).end();
+  }
+
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Méthode non autorisée" });
   }
 
   try {
-    const { messages } = req.body as { messages?: { role: string; content: string }[] };
+    const body =
+      typeof req.body === "string"
+        ? (JSON.parse(req.body) as { messages?: { role: string; content: string }[] })
+        : (req.body as { messages?: { role: string; content: string }[] });
+    const { messages } = body ?? {};
     const result = await handleChat(messages ?? []);
     return res.status(200).json(result);
   } catch (err) {

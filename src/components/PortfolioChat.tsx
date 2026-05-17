@@ -220,7 +220,12 @@ export function PortfolioChat({ theme }: PortfolioChatProps) {
         try {
           data = JSON.parse(raw) as { reply?: string; error?: string };
         } catch {
-          throw new Error("Réponse serveur invalide. Lancez npm run dev:server.");
+          const isHtml = raw.trimStart().startsWith("<!");
+          throw new Error(
+            isHtml
+              ? "L'API /api/chat n'est pas active sur ce déploiement. Redéployez sur Vercel après le dernier push."
+              : "Réponse serveur invalide. En local : npm run dev:all",
+          );
         }
       }
 
@@ -247,7 +252,7 @@ export function PortfolioChat({ theme }: PortfolioChatProps) {
           id: nextMessageId(),
           role: "assistant",
           content:
-            "Désolé, je ne suis pas disponible pour le moment. Lancez npm run dev:server et vérifiez le fichier .env.",
+            "Désolé, l'assistant est indisponible. Sur Vercel : vérifiez OPENROUTER_API_KEY dans Settings → Environment Variables, puis Redeploy.",
           streaming: true,
           at: Date.now(),
         },
