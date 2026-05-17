@@ -1,12 +1,12 @@
 export const ASSETS = {
   video: "/assets/Face_Swap_A_person_with_dark_hair_and_a_light_complexion_7iTHO-AE.mp4",
+  poster: "/assets/9925d57a-7508-4669-a14d-a51b6df237ad.jpg",
   cv: "/assets/Med%20Amin%20Chniti%20-%20cv%20(1).pdf",
   models: {
     hackerRoom: "/assets/isometric_hacker_room.glb",
     hack: "/assets/hack.glb",
     icon: "/assets/icon_for_the_web_on_white_background.glb",
     programmer: "/assets/lost_programmer.glb",
-    laptop: "/assets/gaming_laptop.glb",
   },
 } as const;
 
@@ -47,7 +47,7 @@ export const SCROLL_SECTIONS = [
   {
     id: "experience",
     label: "Parcours",
-    modelKey: "hackerRoom" as const,
+    modelKey: "programmer" as const,
     scale: 2.4,
     position: [0, -0.4, 0] as const,
     camera: { position: [0, 3, 10] as const, target: [0, 0.5, 0] as const, fov: 42 },
@@ -55,9 +55,9 @@ export const SCROLL_SECTIONS = [
   {
     id: "contact",
     label: "Contact",
-    modelKey: "laptop" as const,
-    scale: 0.22,
-    position: [0, -0.5, 0] as const,
+    modelKey: "programmer" as const,
+    scale: 2.8,
+    position: [1.5, -0.3, 0] as const,
     camera: { position: [4, 3, 9] as const, target: [0, 0.5, 0] as const, fov: 40 },
   },
 ] as const;

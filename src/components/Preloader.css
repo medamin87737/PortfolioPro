@@ -6,12 +6,13 @@
   overflow: hidden;
 }
 
-.preloader__video {
+.preloader__poster {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  filter: brightness(0.85) saturate(1.05);
 }
 
 .preloader__overlay {

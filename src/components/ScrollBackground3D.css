@@ -5,6 +5,14 @@
   pointer-events: none;
 }
 
+.scroll-bg-3d--lite {
+  background: radial-gradient(
+    ellipse 80% 60% at 70% 40%,
+    color-mix(in srgb, var(--accent) 12%, var(--bg)) 0%,
+    var(--bg) 70%
+  );
+}
+
 .scroll-bg-3d__canvas-wrap,
 .scroll-bg-3d__canvas-wrap canvas {
   width: 100% !important;

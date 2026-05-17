@@ -92,13 +92,12 @@ export function Hero() {
           </div>
 
           <figure className="hero__media">
-            <video
-              className="hero__video"
-              src={ASSETS.video}
-              autoPlay
-              muted
-              loop
-              playsInline
+            <img
+              className="hero__poster"
+              src={ASSETS.poster}
+              alt=""
+              loading="eager"
+              decoding="async"
             />
           </figure>
         </div>
